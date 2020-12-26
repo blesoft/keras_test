@@ -1,6 +1,8 @@
 ### モデル構築 ###
+import matplotlib.pyplot as plt
 from keras import layers,models
 from keras.utils import np_utils
+from keras import optimizers
 import dataset_pre_food
 
 img_size = dataset_pre_food.IMG_SIZE
@@ -23,31 +25,19 @@ model.add(layers.Conv2D(128,(3,3),activation="relu"))
 model.add(layers.MaxPooling2D((2,2)))
 model.add(layers.Flatten())
 model.add(layers.Dense(512,activation="relu"))
-model.add(layers.Dense(cat,activation="sigmoid")) #分類先の種類分設定
+model.add(layers.Dense(cat,activation="softmax")) #分類先の種類分設定
 
 # モデルのコンパイル
-from keras import optimizers
-model.compile(loss="binary_crossentropy",
+model.compile(loss="categorical_crossentropy",
               optimizer=optimizers.RMSprop(lr=1e-4),
               metrics=["acc"])
 
-# print("x_train:")
-# print(x_train)
-# print(type(x_train))
-# print(len(x_train))
-# print("y_train:")
-# print(y_train)
-# print(type(y_train))
-# print(len(y_train))
-
 # モデルの学習
 model = model.fit(x_train,y_train,
-                  epochs=10,batch_size=6,
+                  epochs=15,batch_size=6,
                   validation_data=(x_test,y_test))
 
 # 学習結果表示
-import matplotlib.pyplot as plt
-
 acc = model.history["acc"]
 val_acc = model.history["val_acc"]
 loss = model.history["loss"]

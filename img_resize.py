@@ -1,7 +1,6 @@
 import os
 import cv2 as cv
 
-
 data_dir = "./pic_Food/"
 categories = ["don","egg","noodle","pasta","sarada","soup","sushi"]
 IMG_SIZE = 50

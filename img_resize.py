@@ -1,23 +1,32 @@
 import os
 import cv2 as cv
 
-
-data_dir = "./pic_Food/"
-categories = ["don","egg","noodle","pasta","sarada","soup","sushi"]
-IMG_SIZE = 50
+DATA_DIR = "./pic_Food_sample/downloads/"
+SAVE_DIR = "./pic_Food/"
+categories = ["meat","noodles","seafood","sweets"]
+IMG_SIZE = 75
 
 for category in categories:
-    path = os.path.join(data_dir,category)
-    path2 = path + "_img"
-    num = 0
-    for image_name in os.listdir(path):
-        print(image_name)
+    path_data = os.path.join(DATA_DIR,category)
+    path_save = os.path.join(SAVE_DIR,category)
+    NUM = 0
+    for image_name in os.listdir(path_data):
         # 画像読み込み
-        img_array = cv.imread(os.path.join(path,image_name))
-        # リサイズ
-        image_resize = cv.resize(img_array,(IMG_SIZE,IMG_SIZE))
-        # 保存
-        title = category + str(num) + '.jpg'
-        print(os.path.join(path2,title))
-        cv.imwrite(os.path.join(path2,title),image_resize)
-        num += 1
+        img_array_origin = cv.imread(os.path.join(path_data,image_name))
+        if not img_array_origin is None:
+            # リサイズ
+            image_array_0 = cv.resize(img_array_origin,(IMG_SIZE,IMG_SIZE))
+            # 上下左右反転（データ水増し）
+            image_array_1 = cv.flip(image_array_0,0)
+            image_array_2 = cv.flip(image_array_0,1)
+            image_array_3 = cv.flip(image_array_0,-1)
+            # 保存
+            TITLE_0 = category + str(NUM) + '_0.jpg'
+            TITLE_1 = category + str(NUM) + '_1.jpg'
+            TITLE_2 = category + str(NUM) + '_2.jpg'
+            TITLE_3 = category + str(NUM) + '_3.jpg'
+            cv.imwrite(os.path.join(path_save,TITLE_0),image_array_0)
+            cv.imwrite(os.path.join(path_save,TITLE_1),image_array_1)
+            cv.imwrite(os.path.join(path_save,TITLE_2),image_array_2)
+            cv.imwrite(os.path.join(path_save,TITLE_3),image_array_3)
+            NUM += 1

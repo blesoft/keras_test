@@ -34,7 +34,7 @@ model.compile(loss="categorical_crossentropy",
 
 # モデルの学習
 model = model.fit(x_train,y_train,
-                  epochs=15,batch_size=6,
+                  epochs=15,batch_size=32,
                   validation_data=(x_test,y_test))
 
 # 学習結果表示

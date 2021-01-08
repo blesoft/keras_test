@@ -4,7 +4,7 @@ import cv2 as cv
 DATA_DIR = "./pic_Food_sample/downloads/"
 SAVE_DIR = "./pic_Food/"
 categories = ["meat","noodles","seafood","sweets"]
-IMG_SIZE = 75
+IMG_SIZE = 50
 
 for category in categories:
     path_data = os.path.join(DATA_DIR,category)
@@ -18,7 +18,7 @@ for category in categories:
             weight = img_array_origin.shape[1]
             tan = height / weight
             if 0.5 < tan < 2.0:
-                print(tan)
+                # print(tan)
                 # リサイズ
                 image_array_0 = cv.resize(img_array_origin,(IMG_SIZE,IMG_SIZE))
                 # 上下左右反転（データ水増し）

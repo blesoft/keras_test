@@ -2,14 +2,15 @@
 import matplotlib.pyplot as plt
 from keras import layers,models
 from keras.utils import np_utils
+from keras.callbacks import LearningRateScheduler
 # from keras import optimizers
 import dataset_pre_food
+
 
 IMG_SIZE = 50
 EPOCHS = 100
 BATCH_SIZE = 256
 CAT = len(dataset_pre_food.categories)
-# LEARNING_RATE = 1e-4
 OPTIMIZERS = ["SGD","AdaGrad","RMSprop","AdaDelta","Adam"]
 OPT = OPTIMIZERS[2] #RMSprop
 x_train = dataset_pre_food.x_train.astype("float") / 255
@@ -18,9 +19,16 @@ y_train = np_utils.to_categorical(y_train,CAT)
 x_test  = dataset_pre_food.x_test.astype("float") / 255
 y_test  = dataset_pre_food.y_test
 y_test  = np_utils.to_categorical(y_test,CAT)
+# # 学習率減衰
+# def step_decay(epoch):
+#     lr = 1e-3
+#     if lr >= 50:
+#         lr / 5.0
+#     if lr >= 80:
+#         lr / 2.0
+#     return lr
 
-
-
+# モデル構造　plttype
 model = models.Sequential()
 model.add(layers.Conv2D(32,(3,3),padding='same',input_shape=x_train.shape[1:]))
 model.add(layers.Activation('relu'))
@@ -50,15 +58,67 @@ model.add(layers.Dropout(0.5))
 model.add(layers.Dense(CAT))
 model.add(layers.Activation('softmax'))
 
+# # モデル構造 deeptype
+# model = models.Sequential()
+# model.add(layers.Conv2D(64,(3,3),padding='same',input_shape=x_train.shape[1:]))
+# model.add(layers.Activation('relu'))
+# model.add(layers.Conv2D(64,(3,3),padding='same'))
+# model.add(layers.Activation('relu'))
+# model.add(layers.BatchNormalization())
+# model.add(layers.Conv2D(64,(3,3),padding='same'))
+# model.add(layers.Activation('relu'))
+# model.add(layers.MaxPooling2D(pool_size=(2,2)))
+# model.add(layers.Dropout(0.25))
+
+# model.add(layers.Conv2D(128,(3,3),padding='same'))
+# model.add(layers.Activation('relu'))
+# model.add(layers.Conv2D(128,(3,3),padding='same'))
+# model.add(layers.Activation('relu'))
+# model.add(layers.BatchNormalization())
+# model.add(layers.Conv2D(128,(3,3),padding='same'))
+# model.add(layers.Activation('relu'))
+# model.add(layers.MaxPooling2D(pool_size=(2,2)))
+# model.add(layers.Dropout(0.25))
+
+# model.add(layers.Conv2D(256,(3,3),padding='same'))
+# model.add(layers.Activation('relu'))
+# model.add(layers.Conv2D(256,(3,3),padding='same'))
+# model.add(layers.Activation('relu'))
+# model.add(layers.BatchNormalization())
+# model.add(layers.Conv2D(256,(3,3),padding='same'))
+# model.add(layers.Activation('relu'))
+# model.add(layers.Conv2D(256,(3,3),padding='same'))
+# model.add(layers.Activation('relu'))
+# model.add(layers.Conv2D(256,(3,3),padding='same'))
+# model.add(layers.Activation('relu'))
+# model.add(layers.BatchNormalization())
+# model.add(layers.Conv2D(512,(3,3),padding='same'))
+# model.add(layers.Activation('relu'))
+# model.add(layers.Conv2D(512,(3,3),padding='same'))
+# model.add(layers.Activation('relu'))
+# model.add(layers.GlobalAveragePooling2D())
+
+# model.add(layers.Flatten())
+# model.add(layers.Dense(1024))
+# model.add(layers.Activation('relu'))
+# model.add(layers.Dropout(0.5))
+# model.add(layers.Dense(1024))
+# model.add(layers.Activation('relu'))
+# model.add(layers.Dropout(0.5))
+# model.add(layers.Dense(CAT))
+# model.add(layers.Activation('softmax'))
+
+
 # モデルのコンパイル
 model.compile(loss="categorical_crossentropy",
               optimizer=OPT,
               metrics=["acc"])
 
 # モデルの学習
+# lr_decay = LearningRateScheduler(step_decay)
 model = model.fit(x_train,y_train,
                   epochs=EPOCHS,batch_size=BATCH_SIZE,
-                  validation_data=(x_test,y_test))
+                  validation_data=(x_test,y_test))#,callbacks=[lr_decay])
 
 # 学習結果表示
 acc = model.history["acc"]

@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 from keras import layers,models
 from keras.utils import np_utils
-from keras.callbacks import LearningRateScheduler
+# from keras.callbacks import LearningRateScheduler
 # from keras import optimizers
 import dataset_pre_food
 
@@ -143,12 +143,12 @@ plt.legend()
 SAVE_LOSS = "loss.jpg"
 plt.savefig(SAVE_LOSS)
 
-# # モデルの保存
-# json_string = model.model.to_json()
-# open("food_predict.json","w").write(json_string)
-# # 重みの保存
-# hdf5_file = "food_predict.hdf5"
-# model.model.save_weights(hdf5_file)
+# モデルの保存
+json_string = model.model.to_json()
+open("food_predict.json","w").write(json_string)
+# 重みの保存
+HDF5_FILE = "food_predict.hdf5"
+model.model.save_weights(HDF5_FILE)
 
 # モデルの予測精度計測
 score = model.model.evaluate(x_test,y_test)
@@ -194,8 +194,8 @@ print(score[1])
 #     # json_string = model.model.to_json()
 #     # open("food_predict.json","w").write(json_string)
 #     # # 重みの保存
-#     # hdf5_file = "food_predict.hdf5"
-#     # model.model.save_weights(hdf5_file)
+#     # HDF5_FILE = "food_predict.hdf5"
+#     # model.model.save_weights(HDF5_FILE)
 
 #     # モデルの予測精度計測
 #     score = result.model.evaluate(x_test,y_test)
